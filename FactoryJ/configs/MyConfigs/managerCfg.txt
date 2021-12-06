@@ -1,0 +1,7 @@
+INPUT = input.txt
+OUTPUT = output.txt
+READER_AND_CFG = Reader; configs\MyConfigs\reader_cfg.txt
+WRITER_AND_CFG = Writer; configs\MyConfigs\writer_cfg.txt
+EXECUTOR_NAME_AND_CFG = LookUpTable; configs\MyConfigs\lut1.txt; LookUpTable; configs\MyConfigs\lut2.txt
+ARRAY_OF_EXECUTOR_POS = 1; 2
+MAX_THREADS = 2
