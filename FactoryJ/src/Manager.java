@@ -269,25 +269,25 @@ public class Manager {
 
         // Ставим работников на конвейер в соответствии с их порядковым номером
         for (int i = 0; i < MAX_THREADS; i++){
-            reader.setConsumer(executors.get(positions.get(0) + i));
-            Message = executors.get(positions.get(0) + i).setProducer(reader);
+            reader.setConsumer(executors.get(positions.get(0) * MAX_THREADS + i));
+            Message = executors.get(positions.get(0) * MAX_THREADS + i).setProducer(reader);
             if (Message != RC.CODE_SUCCESS)
                 return Message;
         }
 
-        // Теперь рабочие, взаимодействующие друг с другом, в оригинальном массиве находятся по смещению на MAX_THREADS
+        // КОД РАЗМЕЩЕНИЯ РАБОТНИКОВ БЫЛ ИСПРАВЛЕН
         for (int i = 0; i < positions.size() - 1; i++) {
             for (int j = 0; j < MAX_THREADS; j++) {
-                executors.get(positions.get(i) + j).setConsumer(executors.get(positions.get(i) + j + MAX_THREADS));
-                Message = executors.get(positions.get(i) + j + MAX_THREADS).setProducer(executors.get(positions.get(i) + j));
+                executors.get(positions.get(i) * MAX_THREADS + j).setConsumer(executors.get(positions.get(i + 1) * MAX_THREADS + j));
+                Message = executors.get(positions.get(i + 1) * MAX_THREADS + j).setProducer(executors.get(positions.get(i) * MAX_THREADS + j));
                 if (Message != RC.CODE_SUCCESS)
                     return Message;
             }
         }
 
         for (int i = 0; i < MAX_THREADS; i++) {
-            executors.get(positions.get(0) + i + MAX_THREADS).setConsumer(writer);
-            Message = writer.setProducer(executors.get(positions.get(0) + i + MAX_THREADS));
+            executors.get(positions.get(positions.size() - 1) * MAX_THREADS + i).setConsumer(writer);
+            Message = writer.setProducer(executors.get(positions.get(positions.size() - 1) * MAX_THREADS + i));
             if (Message != RC.CODE_SUCCESS)
                 return Message;
         }
